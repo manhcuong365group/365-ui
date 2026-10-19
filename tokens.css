@@ -1,0 +1,66 @@
+/* @365/ui — chỉ màu, bo góc, đổ bóng (không có cỡ chữ, không có class). Dùng cho app không phải React (Đặt hàng):
+ * @import "tailwindcss"; @import "@365/ui/tokens.css"; rồi ghi đè --color-primary*, --color-nav* trong @theme của app. */
+@theme {
+  /* Brand (teal) */
+  --color-primary: #0d9488;
+  --color-primary-hover: #0f766e;
+  --color-primary-soft: #f0fdfa;
+  --color-primary-fg: #ffffff;
+
+  /* Surfaces */
+  --color-canvas: #f3f8f8;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f6fafa;
+  --color-surface-muted: #eaf2f2;
+
+  /* Text */
+  --color-fg: #14282b;
+  --color-fg-muted: #5b6f72;
+  --color-fg-subtle: #8fa2a4;
+
+  /* Borders */
+  --color-border: #dfe9ea;
+  --color-border-strong: #c5d6d8;
+
+  /* Sidebar / navigation */
+  --color-nav: #0c2b2f;
+  --color-nav-fg: #e6f2f2;
+  --color-nav-muted: #8fb3b5;
+  --color-nav-hover: #123d42;
+  --color-nav-border: #164a50;
+  --color-nav-active: #0d9488;
+
+  /* Status */
+  --color-success: #16a34a;
+  --color-success-soft: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-warning: #d97706;
+  --color-warning-soft: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-info: #0284c7;
+  --color-info-soft: #f0f9ff;
+  --color-info-border: #bae6fd;
+  --color-accent: #7c3aed;
+  --color-accent-soft: #f5f3ff;
+  --color-accent-border: #ddd6fe;
+
+  /* "Xuat Excel" action (kept distinct from teal primary) */
+  --color-export: #047857;
+  --color-export-hover: #065f46;
+  --color-export-fg: #ffffff;
+
+  /* Overlay */
+  --color-overlay: rgb(12 43 47 / 52%);
+
+  /* Radius & shadows */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-dialog: 16px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.04);
+  --shadow-dialog: 0 24px 64px rgb(12 43 47 / 22%);
+}
