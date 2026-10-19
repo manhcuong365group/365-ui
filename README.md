@@ -12,3 +12,6 @@ Cài: `"@365/ui": "github:manhcuong365group/365-ui#v0.1.0"`
 
 Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, danger…), không tự chế mã màu.
 Đổi gì ở đây → tăng version + tag, rồi nâng từng app bằng PR riêng.
+
+## Component React (Kho, Nhân sự, CRM)
+`next.config`: `transpilePackages: ["@365/ui"]`. Dùng: `import { SystemSwitcher } from "@365/ui"`.

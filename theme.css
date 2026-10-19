@@ -2,6 +2,8 @@
  * App dùng: @import "tailwindcss"; @import "@365/ui/theme.css";
  * Màu mặc định = Kho (teal). App khác ghi đè --color-primary*, --color-nav*, ... trong @theme của mình.
  */
+/* Cho Tailwind quét class trong component của gói. */
+@source "./src";
 
 /*
  * Semantic design tokens (Tailwind v4 @theme).
