@@ -1,0 +1,8 @@
+{
+  "name": "@365/ui",
+  "version": "0.1.0",
+  "description": "Giao diện chung các hệ thống 365 Group (Tailwind v4)",
+  "license": "UNLICENSED",
+  "files": ["theme.css"],
+  "exports": { "./theme.css": "./theme.css" }
+}

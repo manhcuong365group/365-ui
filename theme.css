@@ -1,0 +1,1036 @@
+/* @365/ui — giao diện chung các hệ thống 365 Group (Tailwind v4).
+ * App dùng: @import "tailwindcss"; @import "@365/ui/theme.css";
+ * Màu mặc định = Kho (teal). App khác ghi đè --color-primary*, --color-nav*, ... trong @theme của mình.
+ */
+
+/*
+ * Semantic design tokens (Tailwind v4 @theme).
+ * Names describe ROLE, never hue. Components must use these classes
+ * (bg-primary, text-fg-muted, border-border, bg-nav, bg-success-soft,
+ * rounded-card, shadow-card, ...). See docs/DESIGN_SYSTEM.md.
+ * Re-theming = changing the values below.
+ */
+@theme {
+  /* Type scale (raised 10/2026 for readability; Tailwind defaults are 12px / 14px). */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.15rem;
+  --text-sm: 0.90625rem;
+  --text-sm--line-height: 1.35rem;
+
+  /* Brand (teal) */
+  --color-primary: #0d9488;
+  --color-primary-hover: #0f766e;
+  --color-primary-soft: #f0fdfa;
+  --color-primary-fg: #ffffff;
+
+  /* Surfaces */
+  --color-canvas: #f3f8f8;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f6fafa;
+  --color-surface-muted: #eaf2f2;
+
+  /* Text */
+  --color-fg: #14282b;
+  --color-fg-muted: #5b6f72;
+  --color-fg-subtle: #8fa2a4;
+
+  /* Borders */
+  --color-border: #dfe9ea;
+  --color-border-strong: #c5d6d8;
+
+  /* Sidebar / navigation */
+  --color-nav: #0c2b2f;
+  --color-nav-fg: #e6f2f2;
+  --color-nav-muted: #8fb3b5;
+  --color-nav-hover: #123d42;
+  --color-nav-border: #164a50;
+  --color-nav-active: #0d9488;
+
+  /* Status */
+  --color-success: #16a34a;
+  --color-success-soft: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-warning: #d97706;
+  --color-warning-soft: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-info: #0284c7;
+  --color-info-soft: #f0f9ff;
+  --color-info-border: #bae6fd;
+  --color-accent: #7c3aed;
+  --color-accent-soft: #f5f3ff;
+  --color-accent-border: #ddd6fe;
+
+  /* "Xuat Excel" action (kept distinct from teal primary) */
+  --color-export: #047857;
+  --color-export-hover: #065f46;
+  --color-export-fg: #ffffff;
+
+  /* Overlay */
+  --color-overlay: rgb(12 43 47 / 52%);
+
+  /* Radius & shadows */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-dialog: 16px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.04);
+  --shadow-dialog: 0 24px 64px rgb(12 43 47 / 22%);
+}
+
+/*
+ * Legacy CSS variables, kept as aliases of the semantic tokens so existing
+ * custom CSS (var(--primary), var(--bg-surface), ...) keeps working.
+ * Do not add new usages; prefer the semantic tokens above.
+ */
+:root {
+  /* Surfaces & Backgrounds */
+  --bg-app: var(--color-canvas);
+  --bg-surface: var(--color-surface);
+  --bg-subtle: var(--color-surface-subtle);
+  --bg-muted: var(--color-surface-muted);
+
+  /* Typography */
+  --text-primary: var(--color-fg);
+  --text-secondary: var(--color-fg-muted);
+  --text-muted: var(--color-fg-subtle);
+
+  /* Borders */
+  --border-default: var(--color-border);
+  --border-strong: var(--color-border-strong);
+
+  /* Accent & Status Colors */
+  --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --primary-soft: var(--color-primary-soft);
+  --primary-ring: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  --primary-ring-strong: color-mix(in srgb, var(--color-primary) 25%, transparent);
+
+  --success: var(--color-success);
+  --success-soft: var(--color-success-soft);
+
+  --warning: var(--color-warning);
+  --warning-soft: var(--color-warning-soft);
+
+  --danger: var(--color-danger);
+  --danger-soft: var(--color-danger-soft);
+
+  --violet: var(--color-accent);
+  --violet-soft: var(--color-accent-soft);
+
+  /* Sidebar Theme */
+  --sidebar: var(--color-nav);
+  --sidebar-muted: var(--color-nav-muted);
+  --sidebar-hover: var(--color-nav-hover);
+  --sidebar-border: var(--color-nav-border);
+
+  /* Radius & Shadows (--radius-card / --shadow-card come from @theme) */
+  --radius-input: var(--radius-control);
+  --radius-drawer: var(--radius-dialog);
+  --radius-badge: var(--radius-pill);
+
+  /* Shared workflow-form dimensions */
+  --workflow-form-width: 64rem;
+  --workflow-control-height: 2.625rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-app);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* In the base layer so color utilities (e.g. text-primary-fg on a Link button) win. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+.workflow-form {
+  width: 100%;
+  max-width: var(--workflow-form-width);
+  margin-inline: auto;
+}
+
+/* Wide variant for table-heavy forms (Tạo phiếu nhập): use the full content width. */
+.workflow-form.workflow-form--wide {
+  max-width: none;
+}
+
+.workflow-form-card {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.workflow-form-control {
+  width: 100%;
+  height: var(--workflow-control-height);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-input);
+  background: var(--bg-surface);
+  padding-inline: 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.90625rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.workflow-form-control--subtle {
+  background: var(--bg-subtle);
+}
+
+.workflow-form-control--search {
+  padding-left: 2.25rem;
+}
+
+.workflow-series-control {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.workflow-form-control--multiline {
+  height: auto;
+  min-height: 7rem;
+  padding: 0.75rem;
+  resize: vertical;
+}
+
+.workflow-form-control:focus-visible,
+.workflow-form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.workflow-form-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.form-field {
+  display: grid;
+  align-content: start; /* a taller neighbour (hint/error) must not stretch this field's rows */
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.form-field__label {
+  color: var(--text-primary);
+  font-size: 0.90625rem;
+  font-weight: 600;
+}
+
+.form-field__required {
+  margin-inline-start: 0.25rem;
+  color: var(--danger);
+}
+
+.form-field__control {
+  width: 100%;
+  min-height: var(--workflow-control-height);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-input);
+  padding: 0.625rem 0.75rem;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  font-size: 0.90625rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+/* iOS Safari gives date inputs an intrinsic width that overflows grid cells on iPad/phone. */
+input[type="date"].form-field__control {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  text-align: left;
+}
+
+.form-field__control:focus-visible {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.form-field__control:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  background: var(--bg-muted);
+}
+
+.form-field__control[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.form-field__control[aria-invalid="true"]:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 15%, transparent);
+}
+
+/* Ô thiếu dữ liệu khi lưu (upload ảnh/video, ô không phải form-field__control). */
+[data-invalid="true"] {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+
+.form-field__control--icon {
+  padding-inline-start: 2.25rem;
+}
+
+.form-field__control--suffix {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.form-field__control--textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.form-field__hint,
+.form-field__error {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.form-field__hint {
+  color: var(--text-secondary);
+}
+
+.form-field__error {
+  color: var(--danger);
+}
+
+.app-dialog .form-field__label {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+}
+
+.app-dialog .form-field__control--textarea {
+  min-height: 5.5rem;
+}
+
+/* Thêm/Cập nhật sản phẩm: title-case labels and green/red status selects per the doc mockup. */
+.app-dialog .product-form .form-field__label {
+  font-size: 0.875rem;
+  text-transform: none;
+}
+
+.app-dialog .product-form .form-field__control--textarea {
+  min-height: 3.5rem;
+}
+
+.product-form .product-form__status--on {
+  border-color: var(--color-success-border);
+  background: var(--color-success-soft);
+  opacity: 1;
+}
+
+.product-form .product-form__status--off {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  opacity: 1;
+}
+
+.workflow-fault-options {
+  max-height: 15rem;
+  overflow: auto;
+  padding: 0.25rem;
+  overscroll-behavior: contain;
+}
+
+/* Feedback 10/2026: every data table is ruled (row + column lines), like the order list. */
+@layer base {
+  table :is(th, td) {
+    border: 1px solid var(--border-default);
+  }
+  /* The rounded card around the table already draws the outer edge. */
+  table tr > :first-child {
+    border-left: 0;
+  }
+  table tr > :last-child {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .warranty-card-table :is(th, td) {
+    border: 0;
+  }
+  .warranty-card-table {
+    display: block;
+    width: 100%;
+    min-width: 0 !important;
+    border: 0;
+  }
+
+  .warranty-card-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .warranty-card-table tbody {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .warranty-card-table tbody > tr:not(:last-child)::after {
+    display: none;
+  }
+
+  .warranty-card-table tr {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .warranty-card-table td[data-label] {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 34%) minmax(0, 1fr);
+    align-items: start;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  .warranty-card-table td[colspan] {
+    display: block;
+  }
+
+  .warranty-card-table td[data-label]::before {
+    content: attr(data-label);
+    color: var(--text-secondary);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+}
+
+.app-dialog {
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  /* Dialogs opened from a right-aligned table cell (row actions) must not inherit it. */
+  text-align: left;
+  white-space: normal;
+}
+
+.app-dialog::backdrop {
+  background: var(--color-overlay);
+  backdrop-filter: blur(2px);
+}
+
+.app-dialog[data-size="sm"] {
+  width: min(28rem, calc(100vw - 2rem));
+}
+
+.app-dialog[data-size="md"] {
+  width: min(32rem, calc(100vw - 2rem));
+}
+
+.app-dialog[data-size="lg"] {
+  width: min(48rem, calc(100vw - 2rem));
+}
+
+.app-dialog[data-size="xl"] {
+  width: min(84rem, calc(100vw - 2rem));
+}
+
+.app-dialog__panel {
+  display: flex;
+  max-height: min(90dvh, 58rem);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-dialog);
+}
+
+.app-dialog__footer {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border-default);
+  background: var(--bg-surface);
+}
+
+.app-dialog__footer > button {
+  min-height: 2.625rem;
+}
+
+.app-dialog__footer > button:focus-visible {
+  outline: 3px solid var(--primary-ring-strong);
+  outline-offset: 2px;
+}
+
+.app-dialog__header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.app-dialog__title {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.app-dialog__title-icon {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-inline-end: 0.5rem;
+  vertical-align: middle;
+  border-radius: var(--radius-control);
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+}
+
+.app-dialog__subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.app-dialog__header > div {
+  min-width: 0;
+}
+
+.app-dialog__close {
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-default);
+  border-radius: 0.625rem;
+  color: var(--text-secondary);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.app-dialog__close:hover {
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+.app-dialog__close:focus-visible {
+  outline: 3px solid var(--primary-ring-strong);
+  outline-offset: 2px;
+}
+
+.app-dialog__body {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.25rem;
+  overscroll-behavior: contain;
+}
+
+.app-dialog__body input:not([type="checkbox"]):not([type="radio"]):not(.form-field__control),
+.app-dialog__body select:not(.form-field__control),
+.app-dialog__body textarea:not(.form-field__control) {
+  width: 100%;
+  min-height: var(--workflow-control-height);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-input);
+  padding: 0.625rem 0.75rem;
+  color: var(--text-primary);
+  background: var(--color-surface);
+  font-size: 0.90625rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.app-dialog__body textarea:not(.form-field__control) {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.app-dialog__body input:not(.form-field__control):focus-visible,
+.app-dialog__body select:not(.form-field__control):focus-visible,
+.app-dialog__body textarea:not(.form-field__control):focus-visible {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.app-dialog__body input:not(.form-field__control):disabled,
+.app-dialog__body select:not(.form-field__control):disabled,
+.app-dialog__body textarea:not(.form-field__control):disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  background: var(--bg-muted);
+}
+
+.form-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 639px) {
+  .app-dialog__header,
+  .app-dialog__body,
+  .app-dialog__footer {
+    padding: 1rem;
+  }
+
+  .app-dialog__footer > button {
+    flex: 1 1 auto;
+  }
+
+  .form-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Base App Shell Layout */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-sidebar {
+  width: 280px;
+  max-width: 85vw;
+  background: var(--sidebar);
+  color: var(--sidebar-muted);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  /* Stays in view on long pages; the nav list scrolls inside it. */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  align-self: flex-start;
+}
+
+.sidebar-brand-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.sidebar-logo-cube {
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-fg);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.sidebar-brand-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-nav-fg);
+  letter-spacing: -0.2px;
+}
+
+.sidebar-nav-container {
+  flex: 1;
+  min-height: 0;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  /* Thanh cuộn mảnh theo màu sidebar, không chiếm chỗ tên mục. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--sidebar-border) transparent;
+}
+
+.nav-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-nav-muted);
+  padding: 8px 8px 4px 8px;
+  letter-spacing: 0.5px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  color: var(--sidebar-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.nav-item:hover {
+  background: var(--sidebar-hover);
+  color: var(--color-nav-fg);
+}
+
+.nav-item.active {
+  background: var(--color-nav-active);
+  color: var(--color-primary-fg);
+  font-weight: 600;
+}
+
+.nav-child-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 35px;
+  padding: 0 11px;
+  font-size: 13.5px;
+  line-height: 1.3;
+  white-space: nowrap;
+  border-radius: 8px;
+  color: var(--sidebar-muted);
+  transition: all 0.15s ease-in-out;
+}
+
+.nav-child-item:hover {
+  background: var(--sidebar-hover);
+  color: var(--color-nav-fg);
+}
+
+.nav-child-item.active {
+  background: var(--color-nav-active);
+  color: var(--color-primary-fg);
+  font-weight: 600;
+}
+
+.sidebar-footer-box {
+  padding: 16px;
+  border-top: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.support-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--sidebar-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 64px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.app-content {
+  padding: 24px;
+  flex: 1;
+}
+
+.mobile-menu-trigger {
+  display: none;
+}
+
+.list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.05);
+}
+
+.list-toolbar__controls {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 32rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.list-toolbar__search,
+.list-toolbar__filter {
+  min-height: 2.5rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.90625rem;
+}
+
+.list-toolbar__search {
+  min-width: min(100%, 16rem);
+  flex: 1 1 16rem;
+}
+
+.list-toolbar__filter:focus-visible,
+.list-toolbar__search:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.list-toolbar__count {
+  color: var(--color-fg-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+@media (max-width: 639px) {
+  .list-toolbar__controls {
+    flex-basis: 100%;
+  }
+
+  .list-toolbar__search {
+    min-width: 100%;
+    flex-basis: 100%;
+  }
+
+  .list-toolbar__filter {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 1023px) {
+  .mobile-menu-trigger {
+    display: inline-flex;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 24px rgba(16, 24, 40, 0.15);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .app-sidebar.app-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: var(--color-overlay);
+  }
+}
+
+/* Column tools (table-columns.tsx): drag a header to reorder, drag its right edge to resize. */
+.col-tools-th {
+  position: relative;
+  cursor: grab;
+}
+.col-tools-th:active {
+  cursor: grabbing;
+}
+.col-tools-th > .col-resize {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+}
+.col-tools-th > .col-resize:hover {
+  background: var(--color-primary, #0f766e);
+  opacity: 0.4;
+}
+.col-tools-th.col-drop-target {
+  box-shadow: inset 2px 0 0 var(--color-primary, #0f766e);
+}
+
+/* "Hiển thị [20] dòng/trang": danh sách chọn canh phải, các hàng đều nhau (góp ý GY20261014005).
+   appearance: base-select = select tuỳ biến của Chrome/Edge 135+; trình duyệt khác giữ danh sách mặc định. */
+.page-size-select,
+.page-size-select::picker(select) {
+  appearance: base-select;
+}
+.page-size-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 3.5rem;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+}
+.page-size-select::picker(select) {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control, 0.375rem);
+  background: var(--color-surface);
+  padding: 0.25rem;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+.page-size-select option {
+  justify-content: flex-end;
+  min-width: 3rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.page-size-select option::checkmark {
+  display: none;
+}
+.page-size-select option:hover,
+.page-size-select option:focus-visible {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+.page-size-select option:checked {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* GY20261017007: bảng danh sách thành thẻ trên điện thoại (nhãn cột do TableColumns gắn vào data-label). */
+@media (max-width: 639px) {
+  .app-content table[data-cards],
+  .app-content table[data-cards] > tbody {
+    display: block;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .app-content table[data-cards] > thead > tr:last-child {
+    display: none;
+  }
+  .app-content table[data-cards] > tbody > tr {
+    display: block;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.5rem 0.75rem;
+  }
+  .app-content table[data-cards] > tbody > tr > td {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    padding: 0.25rem 0 !important;
+    text-align: right;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    border: 0 !important;
+    position: static !important;
+  }
+  .app-content table[data-cards] > tbody > tr > td[data-label]::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--color-fg-muted);
+    text-align: left;
+  }
+  .app-content table[data-cards] > tbody > tr > td:empty,
+  .app-content table[data-cards] > tbody > tr > td[data-col-pad] {
+    display: none;
+  }
+}
+
+/* GY20261017007: nút Hủy / Lưu của form dính đáy màn hình trên điện thoại. */
+@media (max-width: 639px) {
+  .form-sticky-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 15;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: 0 -4px 16px rgba(16, 24, 40, 0.12);
+  }
+}
