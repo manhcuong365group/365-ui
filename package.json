@@ -1,17 +1,19 @@
 {
   "name": "@365/ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Giao diện chung các hệ thống 365 Group (Tailwind v4)",
   "license": "UNLICENSED",
   "files": [
     "theme.css",
     "tokens.css",
-    "src"
+    "src",
+    "tabbar.css"
   ],
   "exports": {
     ".": "./src/index.ts",
     "./theme.css": "./theme.css",
-    "./tokens.css": "./tokens.css"
+    "./tokens.css": "./tokens.css",
+    "./tabbar.css": "./tabbar.css"
   },
   "peerDependencies": {
     "react": ">=19",

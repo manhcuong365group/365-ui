@@ -1,0 +1,47 @@
+/* @365/ui — thanh tab dưới cho điện thoại (< 768px). Dùng sau theme.css hoặc tokens.css:
+ * @import "@365/ui/tabbar.css";
+ * <nav class="app-tabbar"><a class="app-tabbar__item" aria-current="page"><svg/>Nhãn</a>…</nav>
+ * Nút nổi / thanh dính đáy: bottom: calc(var(--tabbar-h) + 1rem). */
+:root { --tabbar-h: 0px; }
+
+.app-tabbar { display: none; }
+
+@media (max-width: 767px) {
+  :root { --tabbar-h: calc(56px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: var(--tabbar-h); }
+
+  .app-tabbar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 700;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    height: var(--tabbar-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-surface, #fff);
+    border-top: 1px solid var(--color-border, #e5e7eb);
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 0.04);
+  }
+
+  .app-tabbar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--color-fg-subtle, #6b7280);
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .app-tabbar__item > span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; }
+  .app-tabbar__item svg { width: 22px; height: 22px; }
+  .app-tabbar__item[aria-current="page"] { color: var(--color-primary, #0d9488); font-weight: 600; }
+}

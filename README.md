@@ -15,3 +15,6 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 
 ## Component React (Kho, Nhân sự, CRM)
 `next.config`: `transpilePackages: ["@365/ui"]`. Dùng: `import { SystemSwitcher } from "@365/ui"`.
+
+## Thanh tab dưới (điện thoại, v0.4.0)
+`@import "@365/ui/tabbar.css";` rồi render `<nav class="app-tabbar">` với các `<a class="app-tabbar__item">` (icon + `<span>` nhãn, `aria-current="page"` cho tab đang mở). Chỉ hiện < 768px. Nút nổi dùng `bottom: calc(var(--tabbar-h) + 1rem)`.
