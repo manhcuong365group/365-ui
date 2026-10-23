@@ -759,6 +759,13 @@ input[type="date"].form-field__control {
   flex: 1;
 }
 
+/* Điện thoại: lề 24px ăn mất 1/8 bề ngang. */
+@media (max-width: 639px) {
+  .app-content {
+    padding: 12px;
+  }
+}
+
 .mobile-menu-trigger {
   display: none;
 }
