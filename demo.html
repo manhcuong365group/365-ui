@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@365/ui — mẫu điện thoại</title>
+<!-- tokens.css viết bằng @theme (Tailwind) nên trình duyệt không đọc trực tiếp: khi xem thử, chép khối @theme của tokens.css vào :root ở đây. -->
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--color-canvas); color: var(--color-fg); }
+  .app-content { padding: 12px; display: grid; gap: 16px; }
+  h2 { margin: 8px 0 0; font-size: 13px; text-transform: uppercase; color: var(--color-fg-muted); }
+  table { width: 100%; border-collapse: collapse; }
+  .app-content table[data-cards] > thead { display: none; }
+  .app-content table[data-cards] > tbody > tr > td { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+  .app-content table[data-cards] > tbody > tr > td[data-label]::before { content: attr(data-label); color: var(--color-fg-muted); }
+</style>
+<link rel="stylesheet" href="tabbar.css">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<main class="app-content">
+  <div class="m-largetitle">Chào Cường</div>
+
+  <h2>m-stats</h2>
+  <div class="m-stats">
+    <div class="m-stat"><b class="m-stat__value">12</b><span class="m-stat__label">Đang xử lý</span></div>
+    <div class="m-stat"><b class="m-stat__value" style="color:var(--color-warning)">3</b><span class="m-stat__label">Quá hạn</span></div>
+    <div class="m-stat"><b class="m-stat__value" style="color:var(--color-success)">48</b><span class="m-stat__label">Xong tuần này</span></div>
+  </div>
+
+  <h2>m-chip · m-ring</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="m-chip m-chip--success">Đã xong</span>
+    <span class="m-chip m-chip--warning">Chờ duyệt</span>
+    <span class="m-chip m-chip--danger">Quá hạn</span>
+    <span class="m-chip m-chip--info">Đang sửa</span>
+    <span class="m-chip">Nháp</span>
+    <div class="m-ring" style="--value:72">72%</div>
+  </div>
+
+  <h2>Bảng → thẻ (table[data-cards])</h2>
+  <table data-cards>
+    <thead><tr><th>Mã phiếu</th><th>Trạng thái</th><th>Khách hàng</th><th>Ngày tạo</th><th>Thao tác</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Mã phiếu" data-m="title">PX-2026-0012</td><td data-label="Trạng thái" data-m="status"><span class="m-chip m-chip--success">Đã xuất</span></td><td data-label="Khách hàng">Đại lý Hưng Phát</td><td data-label="Ngày tạo">24/10/2026</td><td data-label="Thao tác" data-m="actions"><button>Xem</button></td></tr>
+      <tr><td data-label="Mã phiếu" data-m="title">PX-2026-0011 tên rất dài để thử xuống dòng</td><td data-label="Trạng thái" data-m="status"><span class="m-chip m-chip--warning">Chờ duyệt</span></td><td data-label="Khách hàng">Cửa hàng An Bình</td><td data-label="Ngày tạo">23/10/2026</td><td data-label="Thao tác" data-m="actions"><button>Xem</button></td></tr>
+    </tbody>
+  </table>
+
+  <h2>m-rows</h2>
+  <div class="m-rows">
+    <a class="m-row" href="#"><span>Kho bảo hành</span><span>12 việc</span></a>
+    <a class="m-row" href="#"><span>Đặt hàng</span><span>3 đơn</span></a>
+    <a class="m-row" href="#"><span>Nhân sự</span></a>
+  </div>
+
+  <h2>m-card</h2>
+  <div class="m-card">Thẻ thường: nội dung bất kỳ.</div>
+</main>
+<nav class="app-tabbar">
+  <a class="app-tabbar__item" aria-current="page"><span>Trang chủ</span></a>
+  <a class="app-tabbar__item"><span>Phiếu</span></a>
+  <button class="app-tabbar__fab" aria-label="Tạo nhanh">+</button>
+  <a class="app-tabbar__item"><span>Thông báo</span></a>
+  <a class="app-tabbar__item"><span>Tôi</span></a>
+</nav>
+</body>
+</html>

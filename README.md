@@ -18,3 +18,7 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 
 ## Thanh tab dưới (điện thoại, v0.4.0)
 `@import "@365/ui/tabbar.css";` rồi render `<nav class="app-tabbar">` với các `<a class="app-tabbar__item">` (icon + `<span>` nhãn, `aria-current="page"` cho tab đang mở). Chỉ hiện < 768px. Nút nổi dùng `bottom: calc(var(--tabbar-h) + 1rem)`.
+
+## Điện thoại (v0.5.0)
+
+`@import "@365/ui/mobile.css";` sau `tabbar.css`. Lớp: `.m-chip`, `.m-card`, `.m-stats`, `.m-ring`, `.m-largetitle`, `.m-rows`, `.app-tabbar__fab`. Bảng `table[data-cards]` có `td[data-m="title|status|actions"]` thành thẻ bo góc, `.app-dialog` thành tấm trượt từ dưới (< 640px). Xem `demo.html`.

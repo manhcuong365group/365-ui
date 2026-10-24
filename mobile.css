@@ -1,0 +1,169 @@
+/* @365/ui — giao diện điện thoại kiểu iOS. Dùng sau theme.css/tokens.css (+ tabbar.css):
+ * @import "@365/ui/mobile.css";
+ * Bảng: app gắn table[data-cards] + td[data-label], thêm td[data-m="title|status|actions"] → thẻ bo góc.
+ * Lớp .m-* dùng ở mọi khổ; phần còn lại chỉ < 640px. Xem demo.html. */
+
+/* Chip trạng thái: <span class="m-chip m-chip--success">Đã xong</span> */
+.m-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--color-fg-muted);
+  background: var(--color-surface-muted);
+}
+.m-chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.m-chip--success { color: var(--color-success); background: var(--color-success-soft); }
+.m-chip--warning { color: var(--color-warning); background: var(--color-warning-soft); }
+.m-chip--danger { color: var(--color-danger); background: var(--color-danger-soft); }
+.m-chip--info { color: var(--color-info); background: var(--color-info-soft); }
+
+/* Thẻ */
+.m-card {
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+  box-shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+}
+
+/* Ô số liệu: <div class="m-stats"><div class="m-stat"><b class="m-stat__value">12</b><span class="m-stat__label">Đang xử lý</span></div></div> */
+.m-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 10px; }
+.m-stat { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.m-stat__value { font-size: 24px; font-weight: 800; line-height: 1.1; color: var(--color-fg); }
+.m-stat__label { font-size: 12px; color: var(--color-fg-muted); }
+
+/* Vòng tiến độ: <div class="m-ring" style="--value:72">72%</div> */
+.m-ring {
+  --value: 0;
+  --size: 64px;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-fg);
+}
+.m-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--color-primary) calc(var(--value) * 1%), var(--color-border) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+}
+
+/* Tiêu đề lớn */
+.m-largetitle { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+
+/* Dòng kiểu cài đặt: <div class="m-rows"><a class="m-row"><span>Nhãn</span><span>Giá trị</span></a></div> */
+.m-rows { overflow: hidden; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.m-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 14px;
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.m-row + .m-row { border-top: 1px solid var(--color-border); }
+.m-row > :first-child { flex: 1; min-width: 0; }
+.m-row > :last-child:not(:first-child) { color: var(--color-fg-muted); }
+a.m-row::after, button.m-row::after { content: "›"; font-size: 20px; color: var(--color-fg-subtle); }
+
+/* Nút + nổi giữa tab bar */
+.app-tabbar__fab {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: -18px auto 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-primary-fg);
+  background: var(--color-primary);
+  box-shadow: 0 6px 16px rgb(16 24 40 / 0.22);
+}
+
+@media (max-width: 639px) {
+  /* Bảng → thẻ bo góc */
+  .app-content table[data-cards] > tbody {
+    display: grid !important;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  .app-content table[data-cards] > tbody > tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-surface);
+    box-shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+  }
+  .app-content table[data-cards] > tbody > tr > td { grid-column: 1 / -1; font-size: 13px; }
+  .app-content table[data-cards] > tbody > tr > td[data-label]::before { font-size: 12px; font-weight: 500; }
+  .app-content table[data-cards] > tbody > tr > td[data-m="title"] {
+    grid-row: 1;
+    grid-column: 1;
+    justify-content: flex-start;
+    padding-bottom: 6px !important;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .app-content table[data-cards] > tbody > tr > td[data-m="status"] {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: start;
+  }
+  .app-content table[data-cards] > tbody > tr > td[data-m="title"]::before,
+  .app-content table[data-cards] > tbody > tr > td[data-m="status"]::before,
+  .app-content table[data-cards] > tbody > tr > td[data-m="actions"]::before { content: none; }
+  .app-content table[data-cards] > tbody > tr > td[data-m="hide"] { display: none; }
+  .app-content table[data-cards] > tbody > tr > td[data-m="actions"] {
+    justify-content: flex-end;
+    margin-top: 6px;
+    padding-top: 8px !important;
+    border-top: 1px solid var(--color-border) !important;
+  }
+
+  /* Hộp thoại → tấm trượt từ dưới */
+  .app-dialog,
+  .app-dialog[data-size] {
+    width: 100vw;
+    max-width: 100vw;
+    margin: auto 0 0;
+  }
+  .app-dialog__panel {
+    position: relative;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .app-dialog__panel::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 36px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--color-border-strong);
+    transform: translateX(-50%);
+  }
+
+  /* Nút chính dính đáy to, dễ bấm */
+  .form-sticky-actions button,
+  .app-dialog__footer > button { min-height: 44px; border-radius: 12px; }
+}
