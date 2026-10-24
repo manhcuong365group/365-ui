@@ -130,6 +130,7 @@ a.m-row::after, button.m-row::after { content: "›"; font-size: 20px; color: va
   .app-content table[data-cards] > tbody > tr > td[data-m="title"]::before,
   .app-content table[data-cards] > tbody > tr > td[data-m="status"]::before,
   .app-content table[data-cards] > tbody > tr > td[data-m="actions"]::before { content: none; }
+  .app-content table[data-cards] > tbody > tr > td[data-m="hide"] { display: none; }
   .app-content table[data-cards] > tbody > tr > td[data-m="actions"] {
     justify-content: flex-end;
     margin-top: 6px;
