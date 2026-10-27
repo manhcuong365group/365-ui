@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@365/ui — mẫu thanh trên, tiêu đề, thẻ số liệu, tab lọc</title>
+<!-- tokens.css dùng @theme (Tailwind) nên chép vào :root để xem thử; app thật chỉ cần @import. -->
+<style>
+  :root {   /* Brand (teal) */   --color-primary: #0d9488;   --color-primary-hover: #0f766e;   --color-primary-soft: #f0fdfa;   --color-primary-fg: #ffffff;    /* Surfaces */   --color-canvas: #f3f8f8;   --color-surface: #ffffff;   --color-surface-subtle: #f6fafa;   --color-surface-muted: #eaf2f2;    /* Text */   --color-fg: #14282b;   --color-fg-muted: #5b6f72;   --color-fg-subtle: #8fa2a4;    /* Borders */   --color-border: #dfe9ea;   --color-border-strong: #c5d6d8;    /* Sidebar / navigation */   --color-nav: #0c2b2f;   --color-nav-fg: #e6f2f2;   --color-nav-muted: #8fb3b5;   --color-nav-hover: #123d42;   --color-nav-border: #164a50;   --color-nav-active: #0d9488;    /* Status */   --color-success: #16a34a;   --color-success-soft: #f0fdf4;   --color-success-border: #bbf7d0;   --color-warning: #d97706;   --color-warning-soft: #fffbeb;   --color-warning-border: #fde68a;   --color-danger: #dc2626;   --color-danger-hover: #b91c1c;   --color-danger-soft: #fef2f2;   --color-danger-border: #fecaca;   --color-info: #0284c7;   --color-info-soft: #f0f9ff;   --color-info-border: #bae6fd;   --color-accent: #7c3aed;   --color-accent-soft: #f5f3ff;   --color-accent-border: #ddd6fe;    /* "Xuat Excel" action (kept distinct from teal primary) */   --color-export: #047857;   --color-export-hover: #065f46;   --color-export-fg: #ffffff;    /* Overlay */   --color-overlay: rgb(12 43 47 / 52%);    /* Radius & shadows */   --radius-control: 8px;   --radius-card: 12px;   --radius-dialog: 16px;   --radius-pill: 999px;   --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.04);   --shadow-dialog: 0 24px 64px rgb(12 43 47 / 22%);  }
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--color-canvas); color: var(--color-fg); }
+  main { padding: 16px; }
+  svg { fill: none; stroke: currentColor; stroke-width: 2; }
+  .swatch { display: flex; gap: 8px; margin-bottom: 16px; }
+  .swatch button { padding: 4px 10px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface); cursor: pointer; }
+</style>
+<link rel="stylesheet" href="components.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+</defs></svg>
+<header class="ui-topbar">
+  <a class="ui-topbar__brand" href="#"><svg width="20" height="20"><use href="#i"/></svg><span>Nhân sự</span></a>
+  <form class="ui-topbar__search"><svg><use href="#s"/></svg><input type="search" placeholder="Tìm nhân viên, hợp đồng…"></form>
+  <div class="ui-topbar__actions">
+    <button class="ui-topbar__btn ui-topbar__btn--collapse"><svg><use href="#i"/></svg><span class="ui-topbar__label">Góp ý</span></button>
+    <button class="ui-topbar__btn ui-topbar__btn--collapse"><svg><use href="#i"/></svg><span class="ui-topbar__label">Tin nhắn</span></button>
+    <button class="ui-topbar__btn"><svg><use href="#i"/></svg><b class="ui-topbar__badge">3</b></button>
+    <button class="ui-topbar__btn"><svg><use href="#i"/></svg><span class="ui-topbar__label">Đổi hệ thống</span></button>
+    <button class="ui-topbar__btn"><svg><use href="#i"/></svg></button>
+  </div>
+</header>
+<main>
+  <div class="swatch">
+    <button onclick="c('#0d9488','#f0fdfa')">Kho</button><button onclick="c('#c2410c','#fff7ed')">Nhân sự</button>
+    <button onclick="c('#7c3aed','#f5f3ff')">CRM</button><button onclick="c('#0066cc','#eff6ff')">Đặt hàng</button><button onclick="c('#991b1b','#fef2f2')">Cổng</button>
+  </div>
+  <div class="ui-page-title"><span class="ui-page-title__icon"><svg><use href="#i"/></svg></span>
+    <div><h1>Danh sách nhân viên</h1><p class="ui-page-title__sub">Quản lý hồ sơ, hợp đồng và phân quyền</p></div>
+    <div class="ui-page-title__actions"><button>Xuất Excel</button><button>Thêm nhân viên</button></div></div>
+  <div class="ui-stat-grid">
+    <div class="ui-stat"><span class="ui-stat__label">Tổng nhân viên</span><b class="ui-stat__value">128</b><span class="ui-stat__note">+3 tháng này</span></div>
+    <div class="ui-stat ui-stat--ok"><span class="ui-stat__label">Đang làm việc</span><b class="ui-stat__value">120</b></div>
+    <div class="ui-stat ui-stat--warn"><span class="ui-stat__label">Hợp đồng sắp hết hạn</span><b class="ui-stat__value">7</b><span class="ui-stat__note">trong 30 ngày</span></div>
+    <div class="ui-stat ui-stat--danger"><span class="ui-stat__label">Quá hạn</span><b class="ui-stat__value">2</b></div>
+  </div>
+  <nav class="ui-filter-tabs">
+    <a class="is-active" aria-current="page" href="#">Tất cả <span class="ui-filter-tabs__count">128</span></a>
+    <a href="#">Đang làm <span class="ui-filter-tabs__count">120</span></a>
+    <a href="#">Thử việc <span class="ui-filter-tabs__count">5</span></a>
+    <a href="#">Đã nghỉ <span class="ui-filter-tabs__count">3</span></a>
+    <a href="#">Sắp hết hạn hợp đồng <span class="ui-filter-tabs__count">7</span></a>
+  </nav>
+</main>
+<script>function c(p,s){document.documentElement.style.setProperty('--color-primary',p);document.documentElement.style.setProperty('--color-primary-soft',s)}</script>
+</body>
+</html>

@@ -22,3 +22,7 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 ## Điện thoại (v0.5.0)
 
 `@import "@365/ui/mobile.css";` sau `tabbar.css`. Lớp: `.m-chip`, `.m-card`, `.m-stats`, `.m-ring`, `.m-largetitle`, `.m-rows`, `.app-tabbar__fab`. Bảng `table[data-cards]` có `td[data-m="title|status|actions"]` thành thẻ bo góc, `.app-dialog` thành tấm trượt từ dưới (< 640px). Xem `demo.html`.
+
+## Thanh trên, tiêu đề trang, thẻ số liệu, tab lọc (v0.6.0)
+
+`@import "@365/ui/components.css";` sau `theme.css`/`tokens.css`. Lớp: `.ui-topbar*` (Góp ý nằm trên thanh trên ở cả 5 hệ thống; dưới 768px Góp ý + Tin nhắn vào menu Tài khoản bằng `.ui-topbar__menu-only`), `.ui-page-title*` (chữ thường, KHÔNG Title Case), `.ui-stat-grid` + `.ui-stat` (`--ok|--warn|--danger`), `.ui-filter-tabs` (+ `__count`, tab chọn = `.is-active` hoặc `aria-current="page"`). Mẫu HTML ở đầu `components.css`; xem thử `components-demo.html`. Logic tìm kiếm/chuông/quyền do mỗi app tự làm.
