@@ -26,3 +26,6 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 ## Thanh trên, tiêu đề trang, thẻ số liệu, tab lọc (v0.6.0)
 
 `@import "@365/ui/components.css";` sau `theme.css`/`tokens.css`. Lớp: `.ui-topbar*` (Góp ý nằm trên thanh trên ở cả 5 hệ thống; dưới 768px Góp ý + Tin nhắn vào menu Tài khoản bằng `.ui-topbar__menu-only`), `.ui-page-title*` (chữ thường, KHÔNG Title Case), `.ui-stat-grid` + `.ui-stat` (`--ok|--warn|--danger`), `.ui-filter-tabs` (+ `__count`, tab chọn = `.is-active` hoặc `aria-current="page"`). Mẫu HTML ở đầu `components.css`; xem thử `components-demo.html`. Logic tìm kiếm/chuông/quyền do mỗi app tự làm.
+
+## Nút kiểu iPhone trên điện thoại (v0.7.0)
+`@import "@365/ui/buttons.css";` sau theme.css. Chỉ màn < 768px, trong `.app-content` / `.app-dialog` / `[data-ui-buttons]`: nút cao 44px, bo 12px, nút chỉ có icon rộng 44px, chạm thì lún nhẹ, chữ nút ≥ 15px; ô nhập chữ 16px (iPhone không tự phóng to), cao 44px. Thanh trên, thanh tab, chip, tab không đổi. Bỏ qua 1 nút: `data-ui-plain`. Máy tính không đổi.

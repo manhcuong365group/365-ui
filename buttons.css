@@ -1,0 +1,36 @@
+/* @365/ui — nút kiểu iPhone trên điện thoại (< 768px), v0.7.0. Dùng sau theme.css:
+ * @import "@365/ui/buttons.css";
+ * Chỉ tác động nút (và link dạng nút a.inline-flex.rounded-*) trong .app-content / .app-dialog / [data-ui-buttons]; thanh trên, thanh tab dưới giữ nguyên.
+ * Bỏ qua 1 nút: thêm data-ui-plain. Máy tính (>= 768px) không đổi gì. */
+@media (max-width: 767px) {
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(button, [role="button"], input[type="submit"], input[type="button"], .btn, a.inline-flex:is(.rounded-md, .rounded-lg, .rounded-xl)):not([data-ui-plain], .m-chip, [role="tab"], [role="option"], [role="menuitem"]) {
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+  }
+  /* Bo góc đều 12px, trừ nút tròn (avatar, nút nổi). */
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(button, [role="button"], .btn, a.inline-flex:is(.rounded-md, .rounded-lg, .rounded-xl)):not([data-ui-plain], .rounded-full, .m-chip, [role="tab"], [role="option"], [role="menuitem"]) {
+    border-radius: 12px;
+  }
+  /* Nút chỉ có hình: vùng bấm 44x44, hình giữ nguyên. */
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(button, [role="button"]):has(> svg:only-child):not([data-ui-plain]) {
+    min-width: 44px;
+  }
+  /* Chữ nút tối thiểu 15px (Đặt hàng đang 12px). */
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(button, a.inline-flex:is(.rounded-md, .rounded-lg, .rounded-xl)):not([data-ui-plain], .m-chip, [role="tab"], [role="option"], [role="menuitem"]):is(.text-xs, .text-sm) {
+    font-size: 15px;
+  }
+  /* Chạm: lún nhẹ thay cho hover. */
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(button, [role="button"], .btn, a.inline-flex:is(.rounded-md, .rounded-lg, .rounded-xl)):not(:disabled, [data-ui-plain]):active {
+    transform: scale(0.97);
+    opacity: 0.85;
+  }
+  /* Ô nhập >= 16px để iPhone không tự phóng to; cao 44px cho dễ chạm. */
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"]), select, textarea) {
+    font-size: 16px;
+  }
+  :is(.app-content, .app-dialog, [data-ui-buttons]) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"]), select) {
+    min-height: 44px;
+  }
+}
