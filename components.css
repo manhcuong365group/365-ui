@@ -144,23 +144,57 @@
 .ui-stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
 @media (min-width: 1024px) { .ui-stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .ui-stat {
+  --stat-c: var(--color-primary);
+  --stat-soft: var(--color-surface);
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-height: 92px;
   padding: 12px 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card, 12px);
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
-.ui-stat__label { font-size: 12px; color: var(--color-fg-muted); }
+/* Kiểu thẻ "Nhà trọ Xanh" (v0.8): vòng màu mờ góc phải + ô icon đặc màu, nhãn chữ hoa nhỏ theo màu thẻ. */
+.ui-stat::after {
+  content: "";
+  position: absolute;
+  top: -36px;
+  right: -36px;
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  background: var(--stat-c);
+  opacity: 0.08;
+  pointer-events: none;
+}
+.ui-stat__label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--stat-c); padding-right: 44px; }
 .ui-stat__value { font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--color-fg); font-variant-numeric: tabular-nums; }
 .ui-stat__note { font-size: 12px; color: var(--color-fg-subtle); }
-.ui-stat--ok { background: var(--color-success-soft); border-color: var(--color-success-border); }
+.ui-stat__icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--stat-c);
+  color: #fff;
+}
+.ui-stat__icon svg { width: 18px; height: 18px; }
+.ui-stat--ok { --stat-c: var(--color-success); background: var(--color-success-soft); border-color: var(--color-success-border); }
+.ui-stat--warn { --stat-c: var(--color-warning); background: var(--color-warning-soft); border-color: var(--color-warning-border); }
+.ui-stat--danger { --stat-c: var(--color-danger); background: var(--color-danger-soft); border-color: var(--color-danger-border); }
+.ui-stat--info { --stat-c: var(--color-info); background: var(--color-info-soft); border-color: var(--color-info-border); }
+.ui-stat--accent { --stat-c: var(--color-accent); background: var(--color-accent-soft); border-color: var(--color-accent-border); }
 .ui-stat--ok .ui-stat__value { color: var(--color-success); }
-.ui-stat--warn { background: var(--color-warning-soft); border-color: var(--color-warning-border); }
 .ui-stat--warn .ui-stat__value { color: var(--color-warning); }
-.ui-stat--danger { background: var(--color-danger-soft); border-color: var(--color-danger-border); }
 .ui-stat--danger .ui-stat__value { color: var(--color-danger); }
 
 /* ---- Hàng tab lọc có số đếm ---- */
