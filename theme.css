@@ -2,6 +2,7 @@
  * App dùng: @import "tailwindcss"; @import "@365/ui/theme.css";
  * Màu mặc định = Kho (teal). App khác ghi đè --color-primary*, --color-nav*, ... trong @theme của mình.
  */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap&subset=latin,latin-ext,vietnamese");
 @import "./tokens.css";
 
 /* Cho Tailwind quét class trong component của gói. */
@@ -15,6 +16,8 @@
  * Re-theming = changing the values below.
  */
 @theme {
+  /* Font chung (GY20261106006): Inter, có dải tiếng Việt; display=swap giảm FOUT. */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* Type scale (raised 10/2026 for readability; Tailwind defaults are 12px / 14px). */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.15rem;
@@ -89,7 +92,7 @@ body {
 }
 
 body {
-  font-family: var(--font-inter, 'Inter'), 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-sans);
   color: var(--text-primary);
   background: var(--bg-app);
   font-size: 15px;
