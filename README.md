@@ -29,3 +29,13 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 
 ## Nút kiểu iPhone trên điện thoại (v0.7.0)
 `@import "@365/ui/buttons.css";` sau theme.css. Chỉ màn < 768px, trong `.app-content` / `.app-dialog` / `[data-ui-buttons]`: nút cao 44px, bo 12px, nút chỉ có icon rộng 44px, chạm thì lún nhẹ, chữ nút ≥ 15px; ô nhập chữ 16px (iPhone không tự phóng to), cao 44px. Thanh trên, thanh tab, chip, tab không đổi. Bỏ qua 1 nút: `data-ui-plain`. Máy tính không đổi.
+
+## Mẫu chung đợt A (v0.10.0)
+`@import "@365/ui/patterns.css";` sau theme.css/tokens.css (+ components.css cho `.ui-stat`, mobile.css cho `.m-chip`). Xem `patterns-demo.html`; mẫu HTML ở đầu mỗi khối trong `patterns.css`. Chữ phụ dùng `--color-fg-muted` (AA), không dùng `--color-fg-subtle` cho chữ.
+- Đầu trang: `.ui-page-head` + `__crumbs` `__main` `__title` `__sub` `__actions` (thứ tự cố định breadcrumb → tiêu đề → nút; nút chính đặt cuối; mobile tối đa 2 nút, chính đứng trước). `.ui-btn`, `--primary`.
+- KPI: `.ui-kpi-grid` (5 cột ≥1024, 3 cột ≥640, 1 cột mobile) + `.ui-stat` + `.ui-stat--secondary` (ẩn < 640px) + `.ui-stat__spark` (sparkline SVG).
+- Trống/tải/lỗi: `.ui-state` (`--error`, `__icon __title __text __actions`), `.ui-skeleton-list` + `.ui-skeleton` (`--short`, `--block`).
+- Chip lọc: `.ui-chips` + `.ui-chip` (`aria-pressed="true"` hoặc `.is-active`) + `.ui-chip__count` (`--warn`, `--danger`).
+- Thẻ danh sách: `.ui-list-cards` > `.ui-list-card` > `__link __title __status __meta` (tối đa 4 dòng). Bảng → thẻ < 768px: `table.ui-table-cards` + `td[data-label]`, `data-m="title|status|hide|actions"`.
+- Thanh dưới: `.ui-bottomnav` + `__item` `__badge` (tối đa 5 mục, safe-area), `body.ui-has-bottomnav`.
+- Vùng bấm 44px (< 768px): `.ui-touch-scope` (khung), `.ui-touch` (lẻ), `.ui-touch-link`; bỏ qua `data-ui-plain`.
