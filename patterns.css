@@ -1,0 +1,190 @@
+/* @365/ui — mẫu dùng chung đợt A (v0.10.0): đầu trang, KPI, trạng thái trống/tải/lỗi, chip lọc, thẻ danh sách,
+ * thanh dưới, vùng bấm 44px. Chỉ CSS, dùng cho Next và Blade. Màu lấy từ token; mỗi hệ thống chỉ ghi đè --color-primary*.
+ *   @import "@365/ui/patterns.css";   (sau theme.css hoặc tokens.css; .ui-stat lấy từ components.css)
+ * Thang 4px; chữ phụ dùng --color-fg-muted (đạt AA), KHÔNG dùng --color-fg-subtle cho chữ. Xem patterns-demo.html. */
+
+/* ---- 1. Đầu trang: breadcrumb → tiêu đề → nút (thứ tự cố định)
+ * <header class="ui-page-head">
+ *   <nav class="ui-page-head__crumbs" aria-label="Đường dẫn"><a href>Nhân sự</a><span aria-current="page">Nhân viên</span></nav>
+ *   <div class="ui-page-head__main"><h1 class="ui-page-head__title">Danh sách nhân viên</h1><p class="ui-page-head__sub">…</p></div>
+ *   <div class="ui-page-head__actions"><button class="ui-btn">Xuất</button><button class="ui-btn ui-btn--primary">Thêm</button></div>
+ * </header>  Nút chính ĐẶT CUỐI trong HTML (nằm bên phải). Mobile: nút xuống dưới tiêu đề, nút chính đứng trước, tối đa 2 nút. */
+.ui-page-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "crumbs crumbs" "main actions";
+  align-items: end;
+  gap: 4px 16px;
+  margin-bottom: 16px;
+}
+.ui-page-head__crumbs { grid-area: crumbs; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 13px; color: var(--color-fg-muted); }
+.ui-page-head__crumbs > a { color: var(--color-fg-muted); text-decoration: none; border-radius: 4px; padding: 2px 0; }
+.ui-page-head__crumbs > a:hover { color: var(--color-primary); text-decoration: underline; }
+.ui-page-head__crumbs > a:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.ui-page-head__crumbs > * + *::before { content: "/"; margin-right: 4px; color: var(--color-border-strong); }
+.ui-page-head__crumbs > [aria-current="page"] { color: var(--color-fg); font-weight: 500; }
+.ui-page-head__main { grid-area: main; min-width: 0; }
+.ui-page-head__title { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--color-fg); overflow-wrap: anywhere; }
+.ui-page-head__sub { margin: 4px 0 0; font-size: 13px; color: var(--color-fg-muted); }
+.ui-page-head__actions { grid-area: actions; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+@media (max-width: 767px) {
+  .ui-page-head { grid-template-columns: minmax(0, 1fr); grid-template-areas: "crumbs" "main" "actions"; gap: 4px; }
+  .ui-page-head__title { font-size: 20px; }
+  .ui-page-head__crumbs > :not(:last-child):not(:nth-last-child(2)) { display: none; } /* chỉ giữ cấp cha + trang hiện tại */
+  .ui-page-head__actions { flex-wrap: nowrap; flex-direction: row-reverse; margin-top: 8px; }
+  .ui-page-head__actions > * { flex: 1 1 0; }
+  .ui-page-head__actions > :nth-last-child(n + 3) { display: none; } /* tối đa 2 nút; còn lại vào menu ⋯ */
+}
+
+/* Nút dùng chung (cho demo + app chưa có nút riêng) */
+.ui-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 36px; padding: 0 16px; border: 1px solid var(--color-border-strong); border-radius: var(--radius-control, 8px);
+  background: var(--color-surface); color: var(--color-fg); font: inherit; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer;
+}
+.ui-btn:hover { background: var(--color-surface-muted); }
+.ui-btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.ui-btn:disabled, .ui-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.ui-btn--primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-fg, #fff); }
+.ui-btn--primary:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+.ui-btn > svg { width: 16px; height: 16px; flex: none; }
+
+/* ---- 2. KPI: lưới 5 ô desktop, mobile chỉ ô chính. Dùng .ui-stat của components.css.
+ * <div class="ui-kpi-grid"><div class="ui-stat">…</div><div class="ui-stat ui-stat--secondary">…</div>…</div>
+ * Chỗ sparkline: <svg class="ui-stat__spark" viewBox="0 0 80 24"><polyline points="…"/></svg> (đường lấy màu thẻ) */
+.ui-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (min-width: 640px) { .ui-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .ui-kpi-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+  .ui-kpi-grid { grid-template-columns: minmax(0, 1fr); }
+  .ui-kpi-grid > .ui-stat--secondary { display: none; } /* mobile: chỉ ô chính, ô phụ xem ở trang chi tiết */
+}
+.ui-stat__spark { display: block; width: 80px; height: 24px; margin-top: auto; fill: none; stroke: var(--stat-c, var(--color-primary)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ui-stat__note { color: var(--color-fg-muted); } /* ghi đè v0.8: fg-subtle không đạt AA */
+
+/* ---- 3. Trống / đang tải / lỗi — một kiểu
+ * <div class="ui-state" role="status"><span class="ui-state__icon"><svg/></span><h3 class="ui-state__title">Chưa có nhân viên</h3>
+ *   <p class="ui-state__text">…</p><div class="ui-state__actions"><button class="ui-btn ui-btn--primary">Thêm</button></div></div>
+ * Lỗi: thêm .ui-state--error và role="alert". Tải: <div class="ui-skeleton-list" aria-busy="true"><div class="ui-skeleton"></div>…</div> */
+.ui-state {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 40px 16px; text-align: center;
+  border: 1px dashed var(--color-border-strong); border-radius: var(--radius-card, 12px); background: var(--color-surface);
+}
+.ui-state__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary); }
+.ui-state__icon > svg { width: 24px; height: 24px; }
+.ui-state__title { margin: 0; font-size: 16px; font-weight: 600; color: var(--color-fg); }
+.ui-state__text { margin: 0; max-width: 40ch; font-size: 14px; color: var(--color-fg-muted); }
+.ui-state__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
+.ui-state--error { border-style: solid; border-color: var(--color-danger-border); background: var(--color-danger-soft); }
+.ui-state--error .ui-state__icon { background: var(--color-surface); color: var(--color-danger); }
+.ui-state--error .ui-state__title { color: var(--color-danger-hover); }
+.ui-skeleton-list { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--color-border); border-radius: var(--radius-card, 12px); background: var(--color-surface); }
+.ui-skeleton {
+  height: 16px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-surface-muted) 25%, var(--color-border) 50%, var(--color-surface-muted) 75%) 0 0 / 200% 100%;
+  animation: ui-shimmer 1.4s linear infinite;
+}
+.ui-skeleton--short { width: 40%; }
+.ui-skeleton--block { height: 72px; border-radius: var(--radius-card, 12px); }
+@keyframes ui-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .ui-skeleton { animation: none; } }
+
+/* ---- 4. Chip lọc có số đếm
+ * <div class="ui-chips" role="group" aria-label="Lọc"><button class="ui-chip" aria-pressed="true">Tất cả <span class="ui-chip__count">48</span></button>…</div>
+ * Chọn = aria-pressed="true" hoặc .is-active; mobile cuộn ngang. Số đếm đổi tông: .ui-chip__count--warn | --danger. */
+.ui-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+@media (max-width: 767px) {
+  .ui-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .ui-chips::-webkit-scrollbar { display: none; }
+}
+.ui-chip {
+  display: inline-flex; align-items: center; gap: 8px; flex: none; min-height: 36px; padding: 0 12px;
+  border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill, 999px);
+  background: var(--color-surface); color: var(--color-fg); font: inherit; font-size: 13px; font-weight: 500; white-space: nowrap; text-decoration: none; cursor: pointer;
+}
+.ui-chip:hover { background: var(--color-surface-muted); border-color: var(--color-fg-muted); }
+.ui-chip:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.ui-chip:disabled, .ui-chip[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.ui-chip__count { min-width: 20px; padding: 0 6px; border-radius: var(--radius-pill, 999px); background: var(--color-surface-muted); color: var(--color-fg-muted); font-size: 12px; font-weight: 600; line-height: 20px; text-align: center; font-variant-numeric: tabular-nums; }
+.ui-chip.is-active, .ui-chip[aria-pressed="true"] { background: var(--color-primary-soft); border-color: var(--color-primary); color: var(--color-primary-hover); }
+.ui-chip.is-active .ui-chip__count, .ui-chip[aria-pressed="true"] .ui-chip__count { background: var(--color-primary); color: var(--color-primary-fg, #fff); }
+.ui-chip__count--warn { background: var(--color-warning-soft); color: #92400e; }
+.ui-chip__count--danger { background: var(--color-danger-soft); color: var(--color-danger-hover); }
+
+/* ---- 5. Thẻ danh sách (mobile) + bảng → thẻ dưới md
+ * <ul class="ui-list-cards"><li class="ui-list-card"><a class="ui-list-card__link" href>
+ *   <span class="ui-list-card__title">Nguyễn Văn A</span><span class="ui-list-card__status"><span class="m-chip m-chip--success">Đang làm</span></span>
+ *   <span class="ui-list-card__meta">NV1009 · Kế toán</span><span class="ui-list-card__meta">Vào làm 01/03/2024</span></a></li></ul>
+ * Tối đa 4 dòng: tiêu đề (+trạng thái), 2–3 dòng meta. Chip trạng thái .m-chip lấy từ mobile.css.
+ * Bảng: <table class="ui-table-cards"> + td[data-label="Nhãn"]; td[data-m="title"] đầu thẻ, td[data-m="status"] góc phải, td[data-m="hide"] ẩn, td[data-m="actions"] cuối. */
+.ui-list-cards { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ui-list-card { border: 1px solid var(--color-border); border-radius: var(--radius-card, 12px); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.ui-list-card__link {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; min-height: 44px; padding: 12px 16px;
+  color: inherit; text-decoration: none; border-radius: inherit;
+}
+.ui-list-card__link:hover { background: var(--color-surface-subtle); }
+.ui-list-card__link:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+.ui-list-card__link:active { background: var(--color-surface-muted); }
+.ui-list-card__title { grid-column: 1; font-size: 15px; font-weight: 600; color: var(--color-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-list-card__status { grid-column: 2; grid-row: 1; align-self: start; }
+.ui-list-card__meta { grid-column: 1 / -1; font-size: 13px; color: var(--color-fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-list-card[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+
+@media (max-width: 767px) {
+  .ui-table-cards, .ui-table-cards tbody { display: block; width: 100%; }
+  .ui-table-cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } /* giữ cho trình đọc màn hình */
+  .ui-table-cards tbody { display: grid; gap: 8px; }
+  .ui-table-cards tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 12px 16px;
+    border: 1px solid var(--color-border); border-radius: var(--radius-card, 12px); background: var(--color-surface); box-shadow: var(--shadow-card);
+  }
+  .ui-table-cards td { display: flex; gap: 8px; grid-column: 1 / -1; padding: 0; border: 0; font-size: 13px; color: var(--color-fg-muted); }
+  .ui-table-cards td[data-label]::before { content: attr(data-label); flex: none; min-width: 88px; color: var(--color-fg-muted); font-weight: 500; }
+  .ui-table-cards td[data-m="title"] { grid-column: 1; grid-row: 1; font-size: 15px; font-weight: 600; color: var(--color-fg); }
+  .ui-table-cards td[data-m="status"] { grid-column: 2; grid-row: 1; align-self: start; }
+  .ui-table-cards td[data-m="title"]::before, .ui-table-cards td[data-m="status"]::before, .ui-table-cards td[data-m="actions"]::before { content: none; }
+  .ui-table-cards td[data-m="hide"] { display: none; }
+  .ui-table-cards td[data-m="actions"] { justify-content: flex-end; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--color-border); }
+}
+
+/* ---- 6. Thanh điều hướng dưới (mobile, tối đa 5 mục, safe-area)
+ * <nav class="ui-bottomnav" aria-label="Chính"><a class="ui-bottomnav__item" aria-current="page"><svg/><span>Tổng quan</span><b class="ui-bottomnav__badge">3</b></a>…</nav>
+ * Thêm class .ui-has-bottomnav vào <body> để chừa chỗ đáy. Mục thứ 6 trở đi bị ẩn (gom vào mục "Thêm"). */
+:root { --bottomnav-h: calc(56px + env(safe-area-inset-bottom)); }
+.ui-bottomnav { display: none; }
+@media (max-width: 767px) {
+  .ui-has-bottomnav { padding-bottom: var(--bottomnav-h); }
+  .ui-bottomnav {
+    position: fixed; inset: auto 0 0 0; z-index: 40; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    height: var(--bottomnav-h); padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-surface); border-top: 1px solid var(--color-border); box-shadow: 0 -2px 8px rgb(0 0 0 / 0.04);
+  }
+  .ui-bottomnav__item {
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 44px; min-height: 44px;
+    border: 0; background: none; color: var(--color-fg-muted); font: inherit; font-size: 11px; font-weight: 500; line-height: 1.2; text-decoration: none; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ui-bottomnav__item:nth-child(n + 6) { display: none; }
+  .ui-bottomnav__item > svg { width: 24px; height: 24px; }
+  .ui-bottomnav__item > span { max-width: 100%; padding: 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-bottomnav__item:active { background: var(--color-surface-muted); }
+  .ui-bottomnav__item:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -4px; border-radius: 8px; }
+  .ui-bottomnav__item[aria-current="page"] { color: var(--color-primary); font-weight: 600; }
+  .ui-bottomnav__item[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+  .ui-bottomnav__badge { position: absolute; top: 4px; left: calc(50% + 6px); min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--radius-pill, 999px); background: var(--color-danger); color: #fff; font-size: 10px; line-height: 16px; text-align: center; }
+}
+
+/* ---- 7. Vùng bấm ≥ 44px trên mobile
+ * Khung: thêm .ui-touch-scope vào <main> → nút / ô nhập / chip trong đó cao ≥ 44px dưới 768px (ô nhập chữ 16px).
+ * Lẻ: .ui-touch trên 1 phần tử. Link trong đoạn văn: .ui-touch-link (mở rộng vùng bấm vô hình, không đổi bố cục). Bỏ qua: [data-ui-plain]. */
+@media (max-width: 767px) {
+  .ui-touch,
+  .ui-touch-scope :is(button, [role="button"], input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea, .ui-btn, .ui-chip, .ui-filter-tabs > *):not([data-ui-plain]) { min-height: 44px; }
+  .ui-touch,
+  .ui-touch-scope :is(button, [role="button"], .ui-btn, .ui-chip):not([data-ui-plain]) { min-width: 44px; }
+  .ui-touch-scope :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea):not([data-ui-plain]) { font-size: 16px; }
+  .ui-touch-scope :is(input[type="checkbox"], input[type="radio"]):not([data-ui-plain]) { width: 24px; height: 24px; margin: 10px; } /* 24 + 2×10 = 44 */
+  .ui-touch-link { position: relative; }
+  .ui-touch-link::after { content: ""; position: absolute; inset: -12px -4px; }
+}
