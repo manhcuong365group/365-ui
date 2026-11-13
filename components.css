@@ -301,8 +301,8 @@
 /* Hộp xác nhận (dialog con) — thay window.confirm */
 .ui-dialog--confirm { --dlg-w: 400px; }
 .ui-dialog--confirm .ui-dialog__body { color: var(--color-fg); }
-.ui-btn--danger { background: var(--color-danger); border-color: var(--color-danger); color: #fff; }
-.ui-btn--danger:hover { background: var(--color-danger-hover); border-color: var(--color-danger-hover); }
+.ui-btn.ui-btn--danger { background: var(--color-danger); border-color: var(--color-danger); color: #fff; }
+.ui-btn.ui-btn--danger:hover { background: var(--color-danger-hover); border-color: var(--color-danger-hover); }
 /* Drawer (ngăn kéo phải/trái) và Sheet (dưới) */
 .ui-scrim:has(> .ui-drawer) { padding: 0; place-items: stretch end; }
 .ui-scrim:has(> .ui-drawer--left) { place-items: stretch start; }
