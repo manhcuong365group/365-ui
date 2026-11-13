@@ -39,3 +39,43 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 - Thẻ danh sách: `.ui-list-cards` > `.ui-list-card` > `__link __title __status __meta` (tối đa 4 dòng). Bảng → thẻ < 768px: `table.ui-table-cards` + `td[data-label]`, `data-m="title|status|hide|actions"`.
 - Thanh dưới: `.ui-bottomnav` + `__item` `__badge` (tối đa 5 mục, safe-area), `body.ui-has-bottomnav`.
 - Vùng bấm 44px (< 768px): `.ui-touch-scope` (khung), `.ui-touch` (lẻ), `.ui-touch-link`; bỏ qua `data-ui-plain`.
+
+## v0.11.0 — base.css + bộ component theo namethatui
+
+`@import "@365/ui/base.css";` (nền chuẩn trong `@layer base`: box-sizing, font, heading, link, table, ô nhập 44px, `:focus-visible`, `::selection`, reduced-motion, `[hidden]`, `.sr-only`) rồi `@import "@365/ui/components.css"; @import "@365/ui/patterns.css";`.
+React: `import { Tabs, Dialog, useConfirm, toast, … } from "@365/ui"` (cần react, react-dom, lucide-react). Bọc app 1 lần bằng `<ConfirmProvider>` và đặt `<Toaster />` ở layout.
+Blade (Đặt hàng): `x-ui.*` dùng đúng class `ui-*` bên dưới (chưa làm — đợt 2). Demo + trạng thái: `components-demo.html`.
+
+| namethatui | Class `ui-*` | React | Blade `x-ui.*` | Tra cứu |
+|---|---|---|---|---|
+| Tabs | `ui-tabs` `ui-tab` `ui-tabpanel` | `Tabs` | `tabs` | https://namethatui.com/web/tabs → Tabs |
+| Modal Dialog | `ui-dialog` `ui-dialog__*` | `Dialog` | `dialog` | https://namethatui.com/web/dialog-drawer-sheet → Modal Dialog vs Drawer vs Sheet |
+| Drawer / Sheet | `ui-drawer` (`--left`, `--bottom`) | `Drawer` | `drawer` | (cùng mục trên) |
+| Scrim | `ui-scrim` `ui-scroll-lock` | trong `Dialog` | `dialog` | https://namethatui.com/web/scrim → Scrim |
+| Confirm (dialog con) | `ui-dialog--confirm` `ui-btn--danger` | `ConfirmDialog`, `useConfirm` | `confirm-dialog` | (Modal Dialog, role=alertdialog) |
+| Badge / Chip / Pill | `ui-badge` (+`--ok/warn/danger/info/accent/primary/count`), `ui-chip` | `Badge` | `badge` | https://namethatui.com/web/badge-chip-pill → Badge, Chip, Pill |
+| Status Dot | `ui-dot` (+`--pulse`) | `StatusDot` | `status-dot` | https://namethatui.com/web/status-dot → Status Dot |
+| Empty State | `ui-state` (+`--compact`, `--error`) | `EmptyState` | `empty-state` | https://namethatui.com/web/empty-state → Empty State |
+| Skeleton / Spinner | `ui-skeleton`, `ui-spinner` | `Skeleton`, `Spinner` | `skeleton`, `spinner` | https://namethatui.com/web/skeleton-spinner → Skeleton vs Spinner |
+| Progress | `ui-progress` | (CSS) | `progress` | https://namethatui.com/web/progress-indicators → Progress (bar/ring) |
+| Toast | `ui-toaster` `ui-toast` | `Toaster`, `toast` | `toast` | https://namethatui.com/web/toast → Toast (Snackbar) |
+| Inline Alert | `ui-alert` (+`--ok/warn/danger/info`) | `Alert` | `alert` | https://namethatui.com/web/alert-callout-banner → Alert |
+| Callout | `ui-alert ui-callout` | `Callout` | `callout` | (cùng mục) → Callout |
+| Banner | `ui-alert ui-banner` | (CSS) | `banner` | (cùng mục) → Banner |
+| Breadcrumbs | `ui-breadcrumbs` | `Breadcrumbs` | `breadcrumbs` | https://namethatui.com/web/breadcrumbs → Breadcrumbs |
+| Pagination | `ui-pagination` | `Pagination`, `pageList` | `pagination` | https://namethatui.com/web/pagination → Pagination |
+| Switch / Checkbox / Radio | `ui-switch`, `ui-check` | `Switch` | `switch` | https://namethatui.com/web/switch-checkbox-radio → Switch, Checkbox, Radio |
+| Form Field | `ui-field` `ui-field__*` | (CSS) | `field` | https://namethatui.com/web/form-field → Form Field |
+| Toggle Group | `ui-toggle-group` | `ToggleGroup` | `toggle-group` | https://namethatui.com/web/toggle-group → Toggle Group |
+| Popover / Dropdown / Tooltip | `ui-popover`, `ui-menu`, `ui-tooltip` | `Tooltip` (menu: CSS) | `tooltip` | https://namethatui.com/web/popover-dropdown-tooltip → Popover, Dropdown Menu, Tooltip |
+| Accordion | `ui-accordion` | `Accordion` | `accordion` | https://namethatui.com/web/accordion → Accordion |
+| Avatar Group | `ui-avatar`, `ui-avatar-group` | (CSS) | `avatar-group` | https://namethatui.com/web/avatar-group → Avatar Group |
+| Steps | `ui-steps` | `Steps` | `steps` | https://namethatui.com/web/steps → Steps |
+| Timeline | `ui-timeline` | `Timeline` | `timeline` | https://namethatui.com/web/timeline → Timeline |
+| Data Table | `ui-table-wrap` `ui-table` `ui-table__sort` | (CSS) | `table` | https://namethatui.com/web/data-table → Data Table |
+| Combobox | `ui-combobox` | (CSS) | `combobox` | https://namethatui.com/web/combobox → Combobox |
+| Lightbox | `ui-lightbox` | `Lightbox` | `lightbox` | https://namethatui.com/web/lightbox → Lightbox |
+| Divider | `ui-divider` | (CSS) | `divider` | https://namethatui.com/web/divider → Divider / Separator / Rule |
+| Focus Ring | `:focus-visible` trong `base.css` | — | — | https://namethatui.com/web/focus-ring-web → Focus Ring |
+
+Ghi chú: Combobox, Data Table, Avatar Group, Form Field, Divider, Progress mới có CSS (React để đợt sau). Dialog/Drawer/Lightbox/Toaster dùng `react-dom` (portal).
