@@ -17,6 +17,7 @@
   input[type="checkbox"]:not([data-ui-plain]), input[type="radio"]:not([data-ui-plain]) {
     appearance: none; -webkit-appearance: none; box-sizing: border-box; flex: none; width: 44px !important; height: 44px !important; margin: 0 !important;
     border: 12px solid transparent; padding: 2px; border-radius: 16px; cursor: pointer;
+    background-color: transparent; /* thắng background-color: currentColor của flowbite/forms khi :checked (Đặt hàng) */
     --tick-bd: var(--color-border-strong, #a9bfc2); --tick-bg: var(--color-surface, #fff); --tick-on: var(--color-primary, #0d9488);
     background-origin: padding-box; background-clip: content-box, padding-box; background-repeat: no-repeat; background-position: center;
     background-image: linear-gradient(var(--tick-bg), var(--tick-bg)), linear-gradient(var(--tick-bd), var(--tick-bd));
