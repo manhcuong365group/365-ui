@@ -1,0 +1,38 @@
+/* @365/ui — touch.css (v0.12.0): vùng chạm >= 44px trên thiết bị cảm ứng (iPad, điện thoại; mọi cỡ màn hình).
+ * App: @import "@365/ui/touch.css"; (sau theme.css). Chuột (pointer: fine) KHÔNG đổi gì.
+ * Gộp từ bản Kho (17/11) + Nhân sự + CRM. Selector chung, không cần class riêng của app.
+ * Chỉ đặt min-height/min-width (không ép height) nên hình, badge, bảng dày giữ nguyên.
+ * :where() giữ độ ưu tiên thấp; quy tắc nằm ngoài @layer nên vẫn thắng lớp tiện ích Tailwind (h-9, size-8...).
+ * Bỏ qua 1 phần tử: data-ui-plain. Thanh tab đáy .app-tabbar__item / .ui-bottomnav__item đã tự đủ 44px nên bị loại.
+ * Ô tick: trình duyệt bỏ qua padding của checkbox/radio nên vẽ lại hộp 44px, ô thấy được vẫn 20px (viền trong suốt 12px).
+ * Xung đột .ui-touch-scope: ô tick dùng !important để thắng lề/cỡ cũ; patterns.css chỉ áp 24px+lề khi pointer: fine. */
+@media (pointer: coarse) {
+  :where(button, [role="button"], [role="tab"], [role="menuitem"], [role="option"], summary, select, .btn, .ui-btn, .ui-chip,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]),
+    .nav-item, .nav-child-item, .nav-subgroup-toggle, .mobile-menu-trigger,
+    header a, a[role="button"], a[data-row-action], a[class*="inline-flex"], a[class*="btn"]):not(.sr-only, [hidden], [data-ui-plain], .app-tabbar__item, .ui-bottomnav__item) { min-height: 44px; }
+  :where(button, [role="button"], [role="tab"], [role="menuitem"], a[role="button"], a[data-row-action], a[class*="inline-flex"], header a, [data-row-action]):not(.sr-only, [hidden], [data-ui-plain], .app-tabbar__item, .ui-bottomnav__item) { min-width: 44px; touch-action: manipulation; }
+  /* Nhãn bao quanh ô tick/radio: đủ 44px để chạm. */
+  :where(label:has(> input:is([type="checkbox"], [type="radio"]))):not([data-ui-plain]) { min-height: 44px; }
+  input[type="checkbox"]:not([data-ui-plain]), input[type="radio"]:not([data-ui-plain]) {
+    appearance: none; -webkit-appearance: none; box-sizing: border-box; flex: none; width: 44px !important; height: 44px !important; margin: 0 !important;
+    border: 12px solid transparent; padding: 2px; border-radius: 16px; cursor: pointer;
+    --tick-bd: var(--color-border-strong, #a9bfc2); --tick-bg: var(--color-surface, #fff); --tick-on: var(--color-primary, #0d9488);
+    background-origin: padding-box; background-clip: content-box, padding-box; background-repeat: no-repeat; background-position: center;
+    background-image: linear-gradient(var(--tick-bg), var(--tick-bg)), linear-gradient(var(--tick-bd), var(--tick-bd));
+  }
+  input[type="radio"]:not([data-ui-plain]) { border-radius: 22px; }
+  input[type="checkbox"]:not([data-ui-plain]):checked, input[type="checkbox"]:not([data-ui-plain]):indeterminate {
+    background-clip: padding-box, padding-box, padding-box; background-size: 14px 14px, auto, auto; background-position: center, center, center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"), linear-gradient(var(--tick-on), var(--tick-on)), linear-gradient(var(--tick-on), var(--tick-on));
+  }
+  input[type="checkbox"]:not([data-ui-plain]):indeterminate {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8h9' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E"), linear-gradient(var(--tick-on), var(--tick-on)), linear-gradient(var(--tick-on), var(--tick-on));
+  }
+  input[type="radio"]:not([data-ui-plain]):checked {
+    background-clip: content-box, padding-box; background-size: auto; background-position: center;
+    background-image: radial-gradient(circle, var(--tick-on) 0 4px, var(--tick-bg) 4.5px), linear-gradient(var(--tick-on), var(--tick-on));
+  }
+  input[type="checkbox"]:not([data-ui-plain]):disabled, input[type="radio"]:not([data-ui-plain]):disabled { opacity: 0.5; cursor: not-allowed; }
+  input[type="checkbox"]:not([data-ui-plain]):focus-visible, input[type="radio"]:not([data-ui-plain]):focus-visible { outline: 2px solid var(--tick-on); outline-offset: -8px; }
+}

@@ -184,7 +184,10 @@
   .ui-touch,
   .ui-touch-scope :is(button, [role="button"], .ui-btn, .ui-chip):not([data-ui-plain]) { min-width: 44px; }
   .ui-touch-scope :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea):not([data-ui-plain]) { font-size: 16px; }
-  .ui-touch-scope :is(input[type="checkbox"], input[type="radio"]):not([data-ui-plain]) { width: 24px; height: 24px; margin: 10px; } /* 24 + 2×10 = 44 */
   .ui-touch-link { position: relative; }
   .ui-touch-link::after { content: ""; position: absolute; inset: -12px -4px; }
+}
+/* Ô tick trong .ui-touch-scope: chỉ khi con trỏ chính xác (cửa sổ hẹp trên máy tính). Máy cảm ứng do touch.css vẽ lại hộp 44px (0.12.0). */
+@media (max-width: 767px) and (pointer: fine) {
+  .ui-touch-scope :is(input[type="checkbox"], input[type="radio"]):not([data-ui-plain]) { width: 24px; height: 24px; margin: 10px; } /* 24 + 2×10 = 44 */
 }
