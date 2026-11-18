@@ -39,6 +39,7 @@ Màu: dùng bảng màu Tailwind, đặt tên theo công dụng (primary, nav, d
 - Thẻ danh sách: `.ui-list-cards` > `.ui-list-card` > `__link __title __status __meta` (tối đa 4 dòng). Bảng → thẻ < 768px: `table.ui-table-cards` + `td[data-label]`, `data-m="title|status|hide|actions"`.
 - Thanh dưới: `.ui-bottomnav` + `__item` `__badge` (tối đa 5 mục, safe-area), `body.ui-has-bottomnav`.
 - Vùng bấm 44px (< 768px): `.ui-touch-scope` (khung), `.ui-touch` (lẻ), `.ui-touch-link`; bỏ qua `data-ui-plain`.
+- Cảm ứng (pointer: coarse, mọi cỡ màn hình): `@import "@365/ui/touch.css"` (0.12.0) — nút/tab/select/input/summary/menu/link-nút >= 44px, ô tick vẽ lại 44px; bỏ qua `data-ui-plain`.
 
 ## v0.11.0 — base.css + bộ component theo namethatui
 
